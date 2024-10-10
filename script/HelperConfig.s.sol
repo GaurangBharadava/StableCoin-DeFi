@@ -2,13 +2,11 @@
 pragma solidity ^0.8.0;
 
 import {Script} from "forge-std/Script.sol";
-import { MockV3Aggregator } from "../test/mocks/MockV3Aggregator.sol";
+import {MockV3Aggregator} from "../test/mocks/MockV3Aggregator.sol";
 // import { ERC20Mock } from "@openzeppelin/contracts/mocks/ERC20Mock.sol";
 import {ERC20Mock} from "../test/mocks/ERC20Mock.sol";
 
-
 contract HelperConfig is Script {
-
     NetworkConfig public activeNetworkConfig;
 
     uint8 public constant DECIMALS = 8;
@@ -65,5 +63,4 @@ contract HelperConfig is Script {
             deployerKey: DEFAULT_ANVIL_PRIVATE_KEY
         });
     }
-
 }

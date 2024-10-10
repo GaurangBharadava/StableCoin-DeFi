@@ -22,8 +22,8 @@ pragma solidity ^0.8.0;
 // private
 // view & pure functions
 
-import { ERC20Burnable, ERC20 } from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
-import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
+import {ERC20Burnable, ERC20} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 /*
  * @title DecentralizedStableCoin
@@ -65,5 +65,4 @@ contract DecentralizedStableCoin is ERC20Burnable, Ownable {
         _mint(_to, _amount);
         return true;
     }
-
 }

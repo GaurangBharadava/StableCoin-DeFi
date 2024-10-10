@@ -2,14 +2,13 @@
 pragma solidity ^0.8.0;
 
 import {Test} from "forge-std/Test.sol";
-import { DeployDSC } from "../../script/DeployDSC.s.sol";
-import { DSCEngine } from "../../src/DSCEngine.sol";
-import { DecentralizedStableCoin } from "../../src/DecentralizedStableCoin.sol";
-import { HelperConfig } from "../../script/HelperConfig.s.sol";
+import {DeployDSC} from "../../script/DeployDSC.s.sol";
+import {DSCEngine} from "../../src/DSCEngine.sol";
+import {DecentralizedStableCoin} from "../../src/DecentralizedStableCoin.sol";
+import {HelperConfig} from "../../script/HelperConfig.s.sol";
 import {ERC20Mock} from "../mocks/ERC20Mock.sol";
 
 contract DSCEngineTest is Test {
-
     DSCEngine public dsce;
     DecentralizedStableCoin public dsc;
     HelperConfig public helperConfig;
@@ -18,15 +17,15 @@ contract DSCEngineTest is Test {
     address public btcUsdPriceFeed;
     address public weth;
 
-    address public USER = makeAddr('user');
+    address public USER = makeAddr("user");
     uint256 public constant AMOUNT_COLLATERAL = 10 ether;
     uint256 public constant STARTING_ERC20_BALACE = 10 ether;
 
     function setUp() public {
         DeployDSC deployer = new DeployDSC();
         (dsc, dsce, helperConfig) = deployer.run();
-        (ethUsdPriceFeed, btcUsdPriceFeed, weth, ,) = helperConfig.activeNetworkConfig();
-        ERC20Mock(weth).mint(USER,STARTING_ERC20_BALACE);
+        (ethUsdPriceFeed, btcUsdPriceFeed, weth,,) = helperConfig.activeNetworkConfig();
+        ERC20Mock(weth).mint(USER, STARTING_ERC20_BALACE);
     }
 
     //////////////////
@@ -41,14 +40,12 @@ contract DSCEngineTest is Test {
         priceFeedAddresses.push(btcUsdPriceFeed);
 
         vm.expectRevert(DSCEngine.DSCEngine__TokenAddressesAndPriceFeedAddressesAmountsDontMatch.selector);
-        new DSCEngine(tokenAddresses,priceFeedAddresses, address(dsc));
+        new DSCEngine(tokenAddresses, priceFeedAddresses, address(dsc));
     }
-
 
     //////////////////
     // Price Tests ///
     //////////////////
-
 
     function testGetUsdValue() public view {
         uint256 ethAmount = 15e18;
@@ -72,12 +69,11 @@ contract DSCEngineTest is Test {
 
     function testRevertsIfCollateralIsZero() public {
         vm.startPrank(USER);
-        ERC20Mock(weth).approve(address(dsce),AMOUNT_COLLATERAL);
+        ERC20Mock(weth).approve(address(dsce), AMOUNT_COLLATERAL);
 
         vm.expectRevert(DSCEngine.DSCEngine__NeedsMoreThanZero.selector);
-        dsce.depositCollateral(weth,0);
+        dsce.depositCollateral(weth, 0);
         vm.stopPrank();
-
     }
 
     function testRevertWithUnapproveCollateeral() public {
@@ -101,11 +97,6 @@ contract DSCEngineTest is Test {
         uint256 expectedTotalDscMinted = 0;
         uint256 expectedDepositeAmount = dsce.getTokenAmountFromUsd(weth, collateralValueInUsd);
         assertEq(totalUsdMinted, expectedTotalDscMinted);
-        assertEq(AMOUNT_COLLATERAL, expectedDepositeAmount); 
+        assertEq(AMOUNT_COLLATERAL, expectedDepositeAmount);
     }
-
-
-    
-
-
 }
